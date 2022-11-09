@@ -1,0 +1,86 @@
+﻿@model IEnumerable<ChatApp_SignalR.Models.Chat>
+
+@{
+    ViewData["Title"] = "Default";
+}
+@*<h5 style="color:#fff;">Groups</h5>*@
+<hr>
+@*<a class="room-button" id="create-room-btn" href="#">
+        <strong>+</strong>
+    </a>*@
+@*@foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Messages.)
+
+        </tr>
+    }*@
+@foreach (var chat in Model)
+{
+    <style>
+        .aaa :hover {
+            background-color: #333;
+        }
+    </style>
+    <div class="aaa">
+        <a class="" asp-controller="Home" asp-action="Chat" asp-route-id="@chat.Id" style="text-decoration:none">
+            <div class="friend-drawer friend-drawer--onhover active" style="
+    ">
+                <img class="profile-image" src="~/img/profile.png" alt="">
+                <div class="text">
+                    <h6>@chat.Name</h6>
+                    <p class="text-muted">Click here to join in room...</p>
+
+                </div>
+                <span class="time text-muted small">@chat.Type</span>
+
+            </div>
+        </a>
+    </div>
+}
+
+
+
+
+@*<h1>Default</h1>
+
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Type)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Type)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@

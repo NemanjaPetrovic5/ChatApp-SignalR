@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="en" style="background-color:#2b2b2b;">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ChatApp</title>
+
+    <link rel="stylesheet" href="~/css/site.css">
+    <link rel="stylesheet" href="~/css/main.css">
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="main">
+        <div class="chat">
+            @RenderBody()
+        </div>
+    </div>
+
+    <div class="modal" id="create-room-modal">
+        <form asp-controller="Home" asp-action="CreateRoom" class="modal-body">
+            <button type="button" class="close" onclick="closeModal()">X</button>
+            <header>Create group</header>
+            <div>
+                <input name="name">
+            </div>
+            <footer>
+                <button>Create</button>
+            </footer>
+        </form>
+    </div>
+
+    <script src="~/js/site.js"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.0-beta.3/iconify-icon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+    @RenderSection("Scripts", false)
+
+</body>
+</html>

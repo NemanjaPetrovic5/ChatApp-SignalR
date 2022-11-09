@@ -1,0 +1,206 @@
+﻿@model Chat
+
+<style>
+    .dropdown-item:hover{
+        background-color:#2f2f2f;
+    }
+</style>
+<div class="container-fluid ">
+    <div class="row no-gutters1 ">
+        <div class="chat-left-sidebar border-right" style="background-color: #2b2b2b; ">
+
+            <div class="scroll-chat2 ">
+                <div class="chat-border row" style="
+        display: inline-flex;
+        max-height: 150px;
+    ">
+                    <div class="col-md-7">
+                        <img src="~/img/profile.jpg" alt="" class="rounded-circle mr-3">
+                    </div>
+                    <div class="col-md-2">
+                        <a class="find" asp-controller="Home" asp-action="Find">+</a>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown1">
+                            <a class="find" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                ...
+                            </a>
+                            <div class="dropdown-menu" style="background-color:#333; ">
+                                <a class="dropdown-item" id="create-room-btn" href="#" style="color:#fff; ">New group</a>
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" class="dropdown-item "style="color:#fff;">Log out</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal" id="add-user-modal">
+                    <form asp-controller="Home" asp-action="AddUserToGroup" class="modal-body">
+                        <button type="button" class="close" onclick="closeModal()">X</button>
+                        <header>Add User</header>
+                        <div>
+                            <select name="userId" style="width: 100%; ">
+                                @foreach (var group in (dynamic)ViewData["UserGroups2"])
+                                {
+                                    <option value="@group.Id">
+                                        @group.UserName
+
+                                    </option>
+                                }
+
+                            </select>
+                            <div clsss="row" style="height: 200px;" id="groups">
+                                <input type="hidden" value="@Model.Id" name="id">
+
+                            </div>
+                        </div>
+                        <footer>
+                            <button>Add User</button>
+                        </footer>
+                    </form>
+                </div>
+                <div class="side-menue chat-panel2">
+                    <vc:private></vc:private>
+                    <vc:room></vc:room>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12 chart-right-sidebar" style="flex: 1;">
+            <div class="scroll-chat1">
+                <div class="settings-tray">
+                    <div class="friend-drawer no-gutters friend-drawer--grey" style="background-color:#2b2b2b;">
+                        <img class="profile-image" src="~/img/profile1.jpg" alt="">
+                        <div class="text">
+                            <h6>
+                                @Model.Type
+                                @foreach (var group in (dynamic)ViewData["UserGroups1"])
+                                {
+                                    <h6> @group.UserName</h6>
+                                }
+                            </h6>
+
+                        </div>
+                        <a class="add-user" style="font-size:40px; text-decoration:none; color:#fff;" id="add-user-btn" href="#">
+                            <strong>+</strong>
+                        </a>
+                    </div>
+                </div>
+                <div class="chat-panel " id="messageBody">
+                    <div class="row no-gutters chat-body">
+                        @foreach (var message in Model.Messages)
+                        {
+                            if (User.Identity.Name == message.Name)
+                            {
+                                <div data-chat="person2" class="chat active-chat">
+                                    <div class="media mb-4 received-msg  justify-content-start align-items-start">
+
+                                        <div class=" message">
+                                            <p class="mb-1">
+                                                @message.Text
+                                            </p>
+                                            <footer class="fs-12 text-white">@message.Timestamp</footer>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div data-chat="person1" class="chat">
+                                    <div class="media mb-4 received-msg  justify-content-start align-items-start">
+                                        <div class="message p1">
+
+                                            <header1>@message.Name:</header1>
+                                            <p1>
+                                                @message.Text
+                                            </p1>
+                                            <footer1>@message.Timestamp</footer1>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+
+                <form class="chat-input" onsubmit="sendMessage(event)" asp-controller="Home" asp-action="CreateMessage">
+                     <input type="hidden" name="roomId" value="@Model.Id">
+                     <input type="text" name="message" id="message-input" class="message-text">
+                     <iconify-icon icon="bi:mic" class="mic" width="25" style="color:#fff"></iconify-icon>
+                     <button type="submit" class="add-message">
+                          <iconify-icon icon="bx:send" class="send-message" width="25"></iconify-icon>
+                     </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/messageBuilder.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script>
+        var usrName = "@User.Identity.Name";
+    var connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chatHub")
+        .build();
+
+    var _connectionId = '';
+        connection.on("RecieveMessage", function (data) {
+
+            if (data.name == usrName) {
+
+                var message = messageBuilder()
+
+                    .createMessage()
+                    .withHeader(data.name)
+                    .withParagraph(data.text)
+                    .withFooter(data.timestamp)
+                    .build();
+
+                document.querySelector('.chat-body').append(message);
+            }
+            else {
+                var message = messageBuilder()
+
+                    .createMessage()
+                    .withHeader1(data.name)
+                    .withParagraph1(data.text)
+                    .withFooter1(data.timestamp)
+                    .build();
+
+                document.querySelector('.chat-body').append(message);
+            }
+    })
+
+    connection.start()
+        .then(function () {
+            connection.invoke('joinRoom', '@Model.Id');
+        })
+        .catch(function (err) {
+            console.log(err)
+        })
+
+    window.addEventListener('onunload', function () {
+        connection.invoke('leaveRoom', '@Model.Id');
+    })
+
+            var sendMessage = function (event) {
+                event.preventDefault();
+
+                var data = new FormData(event.target);
+
+                document.getElementById('message-input').value = '';
+                axios.post('/Home/SendMessage', data)
+                    .then(res => {
+                        console.log("Message Sent!")
+                    })
+                    .catch(err => {
+                        console.log("Failed to send message!")
+                    })
+            }
+    </script>
+}

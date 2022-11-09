@@ -1,0 +1,44 @@
+﻿@model Chat
+
+<style>
+    .dropdown-item:hover {
+        background-color: #2f2f2f;
+    }
+</style>
+<div class="container-fluid ">
+    <div class="row no-gutters1 ">
+        <div class="chat-left-sidebar border-right" style="background-color: #2b2b2b;">
+
+            <div class="scroll-chat2">
+                <div class="chat-border row" style="display:inline-flex; max-height:150px;">
+                    <div class="col-md-7">
+                        <img src="https://www.clarity-enhanced.net/wp-content/uploads/2020/06/filip.jpg" alt="" class="rounded-circle mr-3">
+                    </div>
+                    <div class="col-md-2">
+                        <a class="find" asp-controller="Home" asp-action="Find">+</a>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dropdown1">
+                            <a class="find" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                                ...
+                            </a>
+                            <div class="dropdown-menu" style="background-color:#333; ">
+                                <a class="dropdown-item" id="create-room-btn" href="#" style="color:#fff; ">New group</a>
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <button type="submit" class="dropdown-item " style="color:#fff;">Log out</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="side-menue chat-panel2">
+                    <vc:private></vc:private>
+                    <vc:room></vc:room>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-12 chart-right-sidebar background" style="flex: 1;">
+        </div>
+    </div>
+</div>
